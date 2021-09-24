@@ -10,6 +10,7 @@ class Equipe extends Model
     use HasFactory;
 
     public function orcamentos() {
-        return $this->belongsToMany('App\Models\Orcamento');
+        return $this->belongsToMany('App\Models\Orcamento')
+        ->withPivot('quant', 'soma_custo', 'soma_venda');
     }
 }

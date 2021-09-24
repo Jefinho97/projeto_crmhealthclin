@@ -16,9 +16,10 @@ class CreateEquipeOrcamentoTable extends Migration
         Schema::create('equipe_orcamento', function (Blueprint $table) {
             $table->foreignId('equipe_id')->constrained();
             $table->foreignId('orcamento_id')->constrained();
-            $table->integer('quant');
-            $table->double('soma_custo');
-            $table->double('soma_venda');
+            
+            $table->integer('quant')->default(1);
+            $table->double('soma_custo', 20, 2)->default(0.00);
+            $table->double('soma_venda', 20, 2)->default(0.00);
             $table->timestamps();
         });
     }

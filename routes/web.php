@@ -16,8 +16,9 @@ use App\Http\Controllers\OrcamentoController;
 
 Route::get('/', [OrcamentoController::class, 'index']);
 Route::get('/orcamentos/create', [OrcamentoController::class, 'create'])->middleware('auth');
-//route::get('/orcamentos/materiais', [OrcamentoController::class, 'materiais']);
-Route::post('/orcamentos', [OrcamentoController::class, 'store']);
-Route::post('/orcamento/{id}', [OrcamentoController::class, 'store_']);
-
+Route::get('/orcamentos/create/equipe', [OrcamentoController:: class, 'create_equipe']);
 Route::get('/dashboard', [OrcamentoController::class, 'dashboard'])->middleware('auth');
+Route::get('/orcamentos/{id}', [EventController::class, 'show']);
+
+Route::post('/orcamentos', [OrcamentoController::class, 'store']);
+Route::post('/orcamentos/equipe', [OrcamentoController::class, 'store_equipe']);

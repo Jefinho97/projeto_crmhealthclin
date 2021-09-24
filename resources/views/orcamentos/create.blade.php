@@ -12,29 +12,35 @@
             <label for="title">Procedimento:</label>
             <input type="text" class="form-control" id="procedimento" name="procedimento" placeholder="Qual o procedimento?">
         </div>
-        <div class="form-group" id="formulario">
+        
+        <div class="form-group" id="form-mat">
             <label for="title">Materiais e Medicamentos:</label>
-            <select name="materials[]" id="materials" class="form-control">
-                @foreach($materials as $material)
-                <option value="{{ $material->id }}">{{ $material->nome }}</option>
-                @endforeach
-            </select>
-            <label for="title">Quantidade:</label>
-            <input type="int" class="form-control" name="quantMat[]" id="quantEquipe">
-            <button type="button" id="add-material" > + </button>
-        </div>
-        
-        @include('orcamentos.materiais')
-        
-        
-        <div class="form-group">
+            <button type="button" class="clonar"> + </button>
+            <div class="clone-form-mat">   
+                <select name="materials[]" id="materials" class="form-control">
+                    <option>----</option>
+                    @foreach($materials as $material)
+                    <option value="{{ $material->id }}">{{ $material->nome }}</option>
+                    @endforeach
+                </select>
+                <label for="title">Quantidade:</label>
+                <input type="int" class="form-control" name="quant_mat[]" id="quant_mat">
+            </div>
+        </div>       
+
+        <div class="form-group" id="form-dia">
             <label for="title">Diarias:</label>
-            <select name="diarias" id="diarias" class="form-control">
-                @foreach($diarias as $diaria)
-                <option value="{{ $diaria->id }}">{{ $diaria->descricao }}</option>
-                @endforeach
-            </select>
+            <button type="button" class="clonar2"> + </button>
+            <div class="clone-form-dia">
+                <select name="diarias[]" id="diarias" class="form-control">
+                    <option>----</option>
+                    @foreach($diarias as $diaria)
+                    <option value="{{ $diaria->id }}">{{ $diaria->descricao }}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
+
         <label for="title">Informações do Paciente:</label>
         <div class="form-group">
             <input type="text" class="form-control" id="paciente" name="paciente" placeholder="Nome do Paciente">
@@ -63,21 +69,23 @@
         </div>
         <div class="form-group">
             <label for="title">Condições de pagamento:</label>
-            <textarea name="description" id="description" class="form-control" placeholder="O que vai acontecer no evento?"></textarea>    
+            <textarea name="condicoes_pag" id="condicoes_pag" class="form-control" placeholder="O que vai acontecer no evento?"></textarea>    
         </div>
         <div class="form-group">
             Orçamento com equipe médica:<input type="checkbox" name="tipo" value="1"> 
         </div>
         <input type="submit" class="btn btn-primary" value="Criar Orcamento">
     </form>
-
-    <script>
-            //https://api.jquery.com/click/
-            $("#add-material").click(function () {
-				//https://api.jquery.com/append/
-                load('materiais.blade.php');
-            });
-        </script>
 </div>
-        
+<script>
+    // clone materiais
+    $(".clonar").click(function() {
+        $(".clone-form-mat").last().clone().appendTo("#form-mat");
+    });
+
+    // clone diarias
+    $(".clonar2").click(function() {
+        $(".clone-form-dia").last().clone().appendTo("#form-dia");
+    });
+</script>
 @endsection

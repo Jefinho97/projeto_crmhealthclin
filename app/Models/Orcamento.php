@@ -18,7 +18,8 @@ class Orcamento extends Model
     }
 
     public function equipes() {
-        return $this->belongsToMany('App\Models\Equipe');
+        return $this->belongsToMany('App\Models\Equipe')
+        ->withPivot('quant', 'soma_custo', 'soma_venda');
     }
 
     public function diarias() {
@@ -26,6 +27,7 @@ class Orcamento extends Model
     }
 
     public function materials() {
-        return $this->belongsToMany('App\Models\Material');
+        return $this->belongsToMany('App\Models\Material')
+        ->withPivot('quant', 'soma_custo', 'soma_venda');
     }
 }

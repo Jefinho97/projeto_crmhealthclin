@@ -13,16 +13,19 @@ use App\Models\User;
 
 use BaconQrCode\Renderer\Color\Rgb;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Auth;
 use mysqli;
 
 class OrcamentoController extends Controller
 {
-    
+
     public function index() {
         
         $user = auth()->user();
         if($user != NULL ) {
-        return view('dashboard');
+
+        return redirect('/dashboard');
+
         }
 
         return view('auth.login');
@@ -30,29 +33,26 @@ class OrcamentoController extends Controller
     }
     
     public function dashboard() {
-        $user = auth()->user();
+        
+        $user = Auth::user();
 
-        $events = $user->events;
+        $orcamentos = $user->orcamentos;
 
-        return view('events.dashboard', ['events' => $events]);
+        $quant = count($orcamentos);
+
+        return view('orcamentos.dashboard', ['orcamentos' => $orcamentos, 'quant' => $quant]);
         
     }
 
     public function create(){
-
         $materials = Material::all();
         $diarias = Diaria::all();
-        $equipes = Equipe::all();
-        $soma1 = 0;
-        $var1 = 0;
-        $tipo = 0;
 
-        return view('orcamentos.create', ['materials' => $materials, 'diarias' => $diarias, 'equipes' => $equipes, 'tipo' => $tipo,'soma1' => $soma1, 'var1'=> $var1]);
+        return view('orcamentos.create', ['materials' => $materials, 'diarias' => $diarias]);
+
     }
 
-    //public function materiais(){
-       // return view('orcamentos.materiais');
-   // }
+    
     public function store(Request $request) {
         
         $orcamento = new Orcamento;
@@ -66,28 +66,66 @@ class OrcamentoController extends Controller
         $orcamento->convenios = $request->convenios;
         $orcamento->condicoes_pag = $request->condicoes_pag;
         $orcamento->data = $request->data;
-        $orcamento->valor_inicial = $request->valor_inicial;
-        $orcamento->tipo = $request->tipo;
+        $orcamento->tipo = $request->has('tipo');        
         
+        //$user = Auth::user();
+        $orcamento->user_id = Auth::id();
+        $orcamento->save();
+        $orcamento = Orcamento::all()->last();
         
-        $user = auth()->user();
-        $orcamento->user_id = $user->id;
-        
-        if($request->tipo == 0){
+        $materials = $request->materials;
+        $diarias = $request->diarias;
+
+        $quant = (is_array($materials) ? count($materials) : 0);
+
+        for ($mat=0; $mat < $quant; $mat++) {
+            $material = Material::findOrFail($materials[$mat]);
             
-            $orcamento->save();
+            $q = $request->quant_mat[$mat];
+            $soma_custo = $material->custo * $q;
+            $soma_venda = $material->venda * $q;
+
+            $orcamento->materials()->attach($material->id, ['quant' => $q, 'soma_custo' => $soma_custo, 'soma_venda' => $soma_venda]);
+        }
+
+        $quant = (is_array($diarias) ? count($diarias) : 0);
+
+        for ($dia=0; $dia < $quant; $dia++) { 
+            $diaria = Diaria::findOrFail($diarias[$dia]);
+            $orcamento->diarias()->attach($diaria->id);
+        }
+         
+        if($orcamento->tipo == false){
             
             return redirect('/dashboard')->with('msg','Evento criado com sucesso!');
 
-        } else {
-
-            $orcamento->save();
-            $orcamento= Orcamento::all()->last();
-
-            return view('orcamentos.equipeMedica', ['orcamento' =>$orcamento]);
-     
+        } else { 
+            $equipes = Equipe::all();
+            return view('orcamentos.equipeMedica', ['equipes' => $equipes, 'orcamento' => $orcamento]);
+            
         }
     
+    }
+
+
+    public function store_equipe(Request $request){
+        $id = $request->id;
+        Orcamento::findOrFail($id)->update(['medico' => $request->medico, 'preco_medico' => $request->preco_medico]);
+        $orcamento = Orcamento::findOrFail($id);
+        $equipes = $request->equipes;
+        $quant = (is_array($equipes) ? count($equipes) : 0);
+
+        for ($equ=0; $equ < $quant; $equ++) { 
+            $equipe = Material::findOrFail($equipes[$equ]);
+            
+            $q = $request->quant_equ[$equ];
+            $soma_custo = $equipe->custo * $q;
+            $soma_venda = $equipe->venda * $q;
+
+            $orcamento->equipes()->attach($equipe->id, ['quant' => $q, 'soma_custo' => $soma_custo, 'soma_venda' => $soma_venda]);
+        }
+
+        return redirect('/dashboard')->with('msg','Evento criado com sucesso!');
     }
 
 }
