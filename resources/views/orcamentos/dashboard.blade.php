@@ -28,7 +28,7 @@
                     <td>{{ $orcamento->status }}</td>
                     <td>{{ $orcamento->razao_status }}</td>
                     <td class="">
-                        <a href="/orcamentos/edit/{{ $orcamento->id }}" class="btn btn-info edit-btn "><ion-icon name="create-outline"></ion-icon> Editar</a> 
+                        <a href="/orcamentos/edit/{{ $orcamento->id }}" class="btn btn-info edit-btn "><ion-icon name="create-outline"></ion-icon> Editar </a> 
                     </td>
                     <td>    
                         <form action="/orcamentos/{{ $orcamento->id }}" method="POST">

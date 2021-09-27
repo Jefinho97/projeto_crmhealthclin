@@ -20,7 +20,43 @@
         
     </head>
     <body>
-      
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <div class="collapse navbar-collapse" id="navbar">
+            <a href="/" class="navbar-brand">
+              {{--<img src="/img/hdcevents_logo.svg" alt="HDC Events">--}}
+            </a>
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a href="/orcamentos/create" class="nav-link">Criar Orçamentos</a>
+              </li>
+              
+              <li class="nav-item">
+                <a href="/dashboard" class="nav-link">Orçamentos Existentes</a>
+              </li>
+              <li class="nav-item">
+                <a href="/materials/create" class="nav-link">Adicionar Materiais e medicamentos</a>
+              </li>
+              <li class="nav-item">
+                <a href="/diarias/create" class="nav-link">Adicionar Diarias</a>
+              </li>
+              <li class="nav-item">
+                <a href="/equipes/create" class="nav-link">Adicionar Profissionais</a>
+              </li>
+              <li class="nav-item">
+                <form action="/logout" method="POST">
+                  @csrf
+                  <a href="/logout" class="nav-link" 
+                    onclick="event.preventDefault();
+                      this.closest('form').submit();">
+                      Sair
+                  </a>
+                </form>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
       <main>
         <div class="container-fluid">
           @if(session('msg'))

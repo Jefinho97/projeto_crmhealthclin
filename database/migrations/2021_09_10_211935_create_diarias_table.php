@@ -16,8 +16,7 @@ class CreateDiariasTable extends Migration
         Schema::create('diarias', function (Blueprint $table) {
             $table->id();
             $table->string('descricao');
-            $table->double('base');
-            $table->double('adicional');
+            $table->double('custo');
             $table->double('venda');
             $table->timestamps();
         });

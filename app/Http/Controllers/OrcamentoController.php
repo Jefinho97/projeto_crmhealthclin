@@ -68,9 +68,9 @@ class OrcamentoController extends Controller
         $orcamento->data = $request->data;
         $orcamento->tipo = $request->has('tipo');        
         
-        //$user = Auth::user();
         $orcamento->user_id = Auth::id();
         $orcamento->save();
+
         $orcamento = Orcamento::all()->last();
         
         $materials = $request->materials;
@@ -84,6 +84,7 @@ class OrcamentoController extends Controller
             $q = $request->quant_mat[$mat];
             $soma_custo = $material->custo * $q;
             $soma_venda = $material->venda * $q;
+            $orcamento->total_material += $soma_custo;
 
             $orcamento->materials()->attach($material->id, ['quant' => $q, 'soma_custo' => $soma_custo, 'soma_venda' => $soma_venda]);
         }
@@ -92,26 +93,29 @@ class OrcamentoController extends Controller
 
         for ($dia=0; $dia < $quant; $dia++) { 
             $diaria = Diaria::findOrFail($diarias[$dia]);
+            $orcamento->total_diaria += $diaria->venda;
+
             $orcamento->diarias()->attach($diaria->id);
         }
-         
+
+        $orcamento->update(['total_material' => $orcamento->total_material, 'total_diaria' => $orcamento->total_diaria]);
+
         if($orcamento->tipo == false){
             
             return redirect('/dashboard')->with('msg','Evento criado com sucesso!');
 
         } else { 
             $equipes = Equipe::all();
-            return view('orcamentos.equipeMedica', ['equipes' => $equipes, 'orcamento' => $orcamento]);
+            return view('orcamentos.create2', ['equipes' => $equipes, 'orcamento' => $orcamento]);
             
         }
     
     }
 
 
-    public function store_equipe(Request $request){
-        $id = $request->id;
-        Orcamento::findOrFail($id)->update(['medico' => $request->medico, 'preco_medico' => $request->preco_medico]);
-        $orcamento = Orcamento::findOrFail($id);
+    public function store2(Request $request){
+        $orcamento = Orcamento::findOrFail($request->id);
+        
         $equipes = $request->equipes;
         $quant = (is_array($equipes) ? count($equipes) : 0);
 
@@ -121,11 +125,27 @@ class OrcamentoController extends Controller
             $q = $request->quant_equ[$equ];
             $soma_custo = $equipe->custo * $q;
             $soma_venda = $equipe->venda * $q;
+            $orcamento->total_equipe += $soma_venda;
 
             $orcamento->equipes()->attach($equipe->id, ['quant' => $q, 'soma_custo' => $soma_custo, 'soma_venda' => $soma_venda]);
         }
+        $orcamento->valor_inicial = $orcamento->total_material 
+        + $orcamento->total_diaria + $orcamento->total_equipe + $orcamento->preco_medico; 
 
-        return redirect('/dashboard')->with('msg','Evento criado com sucesso!');
+        $orcamento->update(['medico' => $request->medico, 'preco_medico' => $request->preco_medico, 'total_equipe' => $orcamento->total_equipe, 'valor_inicial' => $orcamento->valor_inicial]);
+
+        return redirect('/dashboard')->with('msg','Orçamento criado com sucesso!');
+    }
+
+    public function destroy($id) {
+        $orcamentos = Orcamento::findOrFail($id);
+        $orcamentos->diarias()->detach();
+        $orcamentos->equipes()->detach();
+        $orcamentos->materials()->detach();
+        $orcamentos->delete();
+
+        return redirect('/dashboard')->with('msg', 'Orçamento excluído com sucesso!');
+        
     }
 
 }

@@ -36,6 +36,7 @@ class CreateOrcamentosTable extends Migration
             $table->double('desconto', 20, 2)->default(0.00);
             $table->double('valor_inicial', 20, 2)->default(0.00);
             $table->double('valor_final', 20, 2)->default(0.00);
+            $table->foreignId('user_id')->constrained();
             
         });
     }
