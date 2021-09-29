@@ -29,4 +29,11 @@ class MaterialController extends Controller
             return redirect('/dashboard')->with('msg','Função criado com sucesso!');
 
     }
+
+    public function destroy($id) {
+        Material::findOrFail($id)->delete();
+
+        return redirect('/dashboard')->with('msg', 'Diaria excluída com sucesso!');
+        
+    }
 }

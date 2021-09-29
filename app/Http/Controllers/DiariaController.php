@@ -28,10 +28,11 @@ class DiariaController extends Controller
             return redirect('/dashboard')->with('msg','Diaria criado com sucesso!');
 
     }
+    
     public function destroy($id) {
         Diaria::findOrFail($id)->delete();
 
-        return redirect('/dashboard')->with('msg', 'Orçamento excluído com sucesso!');
+        return redirect('/dashboard')->with('msg', 'Diaria excluída com sucesso!');
         
     }
 }

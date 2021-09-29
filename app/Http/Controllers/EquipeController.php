@@ -27,4 +27,10 @@ class EquipeController extends Controller
             return redirect('/dashboard')->with('msg','Função criado com sucesso!');
 
     }
+    public function destroy($id) {
+        Equipe::findOrFail($id)->delete();
+
+        return redirect('/dashboard')->with('msg', 'Função excluída com sucesso!');
+        
+    }
 }

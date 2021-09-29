@@ -11,7 +11,7 @@
         <div class="form-group">
             <label for="title">Tipo:</label>
             <select name="tipo" id="tipo" class="form-control"> 
-                <option value="">----</option>
+                <option value="----" selected>----</option>
                 <option value="Material">Material</option>
                 <option value="Medicamentos">Medicamento</option>
                 <option value="Dietas">Dieta</option>

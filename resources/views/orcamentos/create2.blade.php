@@ -20,7 +20,7 @@
             <button type="button" class="clonar"> + </button>
             <div class="clone-form-prof">
                 <select name="equipes[]" id="equipes" class="form-control">
-                    <option>----</option>
+                    <option selected>----</option>
                     @foreach($equipes as $equipe)
                     <option value="{{ $equipe->id }}">{{ $equipe->funcao }}</option>
                     @endforeach

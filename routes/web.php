@@ -25,6 +25,8 @@ Route::post('/orcamentos', [OrcamentoController::class, 'store']);
 Route::post('/orcamentos/2', [OrcamentoController::class, 'store2']);
 Route::get('/orcamentos/{id}', [OrcamentoController::class, 'show']);
 Route::delete('/orcamentos/{id}', [OrcamentoController::class, 'destroy'])->middleware('auth');
+Route::get('/orcamentos/edit/{id}', [OrcamentoController::class, 'edit'])->middleware('auth');
+Route::put('/orcamentos/update/{id}', [OrcamentoController::class, 'update'])->middleware('auth');
 
 Route::get('/diarias/create', [DiariaController::class, 'create'])->middleware('auth');
 Route::post('/diarias', [DiariaController::class, 'store'])->middleware('auth');

@@ -18,7 +18,7 @@
             <button type="button" class="clonar"> + </button>
             <div class="clone-form-mat">   
                 <select name="materials[]" id="materials" class="form-control">
-                    <option>----</option>
+                    <option value="" selected>----</option>
                     @foreach($materials as $material)
                     <option value="{{ $material->id }}">{{ $material->nome }}</option>
                     @endforeach
@@ -33,7 +33,7 @@
             <button type="button" class="clonar2"> + </button>
             <div class="clone-form-dia">
                 <select name="diarias[]" id="diarias" class="form-control">
-                    <option>----</option>
+                    <option value="" selected>----</option>
                     @foreach($diarias as $diaria)
                     <option value="{{ $diaria->id }}">{{ $diaria->descricao }}</option>
                     @endforeach
@@ -46,13 +46,13 @@
             <input type="text" class="form-control" id="paciente" name="paciente" placeholder="Nome do Paciente">
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" id="email_pac" name="email_pac" placeholder="E-mail do Paciente">
+            <input type="email" class="form-control" id="email_pac" name="email_pac" placeholder="E-mail do Paciente">
         </div>
         <div class="form-group">    
-            <input type="text" class="form-control" id="telefone_1" name="telefone_1" placeholder="Telefone do Paciente">
+            <input type="tel" class="form-control" id="telefone_1" name="telefone_1" placeholder="Telefone do Paciente">
         </div>
         <div class="form-group">    
-            <input type="text" class="form-control" id="telefone_2" name="telefone_2" placeholder="Telefone Opcional do Paciente">
+            <input type="tel" class="form-control" id="telefone_2" name="telefone_2" placeholder="Telefone Opcional do Paciente">
         </div>
         
         <div class="form-group">

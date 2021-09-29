@@ -9,7 +9,7 @@ class Orcamento extends Model
 {
     use HasFactory;
 
-    protected $dates = ['date'];
+    protected $dates = ['data'];
 
     protected $guarded = [];
 
