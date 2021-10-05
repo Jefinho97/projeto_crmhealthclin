@@ -62,4 +62,15 @@ class User extends Authenticatable
     public function orcamentos() {
         return $this->hasMany('App\Models\Orcamento');
     }
+
+    public function diarias() {
+        return $this->hasMany('App\Models\Diaria');
+    }
+
+    public function equipes() {
+        return $this->hasMany('App\Models\Equipe');
+    }
+    public function materials() {
+        return $this->hasMany('App\Models\Material');
+    }
 }

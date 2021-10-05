@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="/css/styles.css">
         <!-- <meta name="csrf-token" content="{{ csrf_token() }}" /> -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="/js/scripts.js"></script>
+        
         
     </head>
     <body>
@@ -30,12 +30,11 @@
               <li class="nav-item">
                 <a href="/orcamentos/create" class="nav-link">Criar Orçamentos</a>
               </li>
-              
               <li class="nav-item">
                 <a href="/dashboard" class="nav-link">Orçamentos Existentes</a>
               </li>
               <li class="nav-item">
-                <a href="/materials/create" class="nav-link">Adicionar Materiais e medicamentos</a>
+                <a href="/materiais/dashboard" class="nav-link">Materiais</a>
               </li>
               <li class="nav-item">
                 <a href="/diarias/create" class="nav-link">Adicionar Diarias</a>
@@ -69,5 +68,6 @@
         <p>CRM Health Clin &copy; 2021</p>
       </footer>
       <script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
+      <script src="/js/scripts.js"></script>
     </body>
 </html>

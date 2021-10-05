@@ -1,12 +1,12 @@
 @extends('layouts.main')
 
-@section('title', 'Área do Usuario')
+@section('title', 'Dashboard')
 
 @section('content')
 
 
 <div class="col-md-10 offset-md-1 dashboard-title-container">
-<h1>Meus Eventos</h1>
+<h1>Orçamentos Cadastrados</h1>
 </div>
 <div class="col-md-10 offset-md-1 dashboard-events-container">
     @if( $quant > 0)
@@ -27,7 +27,7 @@
                     <td><a href="/orcamentos/{{ $orcamento->id }}">{{ $orcamento->procedimento }}</a></td>
                     <td>{{ $orcamento->status }}</td>
                     <td>{{ $orcamento->razao_status }}</td>
-                    <td class="">
+                    <td>
                         <a href="/orcamentos/edit/{{ $orcamento->id }}" class="btn btn-info edit-btn "><ion-icon name="create-outline"></ion-icon> Editar </a> 
                     </td>
                     <td>    
@@ -42,7 +42,7 @@
         </tbody>
     </table>
     @else
-    <p>Você ainda não tem eventos, <a href="/orcamentos/create"> criar orçamento</a></p>
+    <p>Não há nenhum orçamento cadastrado, <a href="/orcamentos/create"> criar orçamento</a></p>
     @endif
 </div>
 @endsection

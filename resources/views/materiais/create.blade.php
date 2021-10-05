@@ -6,16 +6,16 @@
 
 <div id="event-create-container" class="col-md-6 offset-md-3">
     <h1>Adicionar materiais</h1>
-    <form action="/materials" method="POST" enctype="multipart/form-data">
+    <form action="/materiais" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
             <label for="title">Tipo:</label>
             <select name="tipo" id="tipo" class="form-control"> 
                 <option value="----" selected>----</option>
-                <option value="Material">Material</option>
-                <option value="Medicamentos">Medicamento</option>
-                <option value="Dietas">Dieta</option>
-                <option value="Equipamento">Equipamento</option>
+                <option value="material">Material</option>
+                <option value="medicamento">Medicamento</option>
+                <option value="dieta">Dieta</option>
+                <option value="equipamento">Equipamento</option>
             </select>
         </div>
         <div class="form-group">

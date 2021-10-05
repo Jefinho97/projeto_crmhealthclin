@@ -3,7 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
+use App\Models\Orcamento;
 use App\Models\Diaria;
+use App\Models\Equipe;
+use App\Models\Material;
+use App\Models\User;
+
+
+use BaconQrCode\Renderer\Color\Rgb;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Auth;
+use mysqli;
 
 class DiariaController extends Controller
 {
@@ -34,5 +45,32 @@ class DiariaController extends Controller
 
         return redirect('/dashboard')->with('msg', 'Diaria excluída com sucesso!');
         
+    }
+
+    public function dashboard() {
+        
+        $user = Auth::user();
+
+        $diarias = $user->diarias;
+
+        $quant = count($diarias);
+
+        return view('diarias.dashboard', ['diarias' => $diarias, 'quant' => $quant]);
+        
+    }
+
+    public function edit($id) {
+
+        $diaria = Diaria::findOrFail($id);
+
+        return view('diarias.edit', ['diaria' => $diaria]);
+    
+    }
+
+    public function update(Request $request) {
+
+        Diaria::findOrFail($request->id)->update($request->all());
+
+        return redirect('/diarias/dashboard')->with('msg', 'Diaria editada com sucesso!');
     }
 }

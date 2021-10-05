@@ -15,10 +15,11 @@ class CreateEquipesTable extends Migration
     {
         Schema::create('equipes', function (Blueprint $table) {
             $table->id();
+            $table->timestamps();
             $table->string('funcao');
             $table->double('custo');
             $table->double('venda');
-            $table->timestamps();
+            $table->foreignId('user_id')->constrained();
         });
     }
 

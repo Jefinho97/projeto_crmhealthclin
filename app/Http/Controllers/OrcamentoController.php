@@ -47,7 +47,7 @@ class OrcamentoController extends Controller
     public function create(){
         $materials = Material::all();
         $diarias = Diaria::all();
-
+        
         return view('orcamentos.create', ['materials' => $materials, 'diarias' => $diarias]);
 
     }
@@ -80,22 +80,25 @@ class OrcamentoController extends Controller
 
         for ($mat=0; $mat < $quant; $mat++) {
             $material = Material::findOrFail($materials[$mat]);
-            
+            if (is_null($material) == false){
             $q = $request->quant_mat[$mat];
             $soma_custo = $material->custo * $q;
             $soma_venda = $material->venda * $q;
             $orcamento->total_material += $soma_venda;
 
             $orcamento->materials()->attach($material->id, ['quant' => $q, 'soma_custo' => $soma_custo, 'soma_venda' => $soma_venda]);
+            }
         }
 
         $quant = (is_array($diarias) ? count($diarias) : 0);
 
         for ($dia=0; $dia < $quant; $dia++) { 
             $diaria = Diaria::findOrFail($diarias[$dia]);
+            if (is_null($diaria) == false){
             $orcamento->total_diaria += $diaria->venda;
 
             $orcamento->diarias()->attach($diaria->id);
+            }
         }
         $orcamento->valor_inicial = $orcamento->total_material + $orcamento->total_diaria;
         $orcamento->update(['total_material' => $orcamento->total_material, 'total_diaria' => $orcamento->total_diaria, 'total_equipe' => $orcamento->total_equipe, 'valor_inicial' => $orcamento->valor_inicial, 'valor_final' => $orcamento->valor_inicial]);
@@ -121,13 +124,14 @@ class OrcamentoController extends Controller
 
         for ($equ=0; $equ < $quant; $equ++) { 
             $equipe = Equipe::findOrFail($equipes[$equ]);
-            
+            if (is_null($equipe) == false){
             $q = $request->quant_equ[$equ];
             $soma_custo = $equipe->custo * $q;
             $soma_venda = $equipe->venda * $q;
             $orcamento->total_equipe += $soma_venda;
 
             $orcamento->equipes()->attach($equipe->id, ['quant' => $q, 'soma_custo' => $soma_custo, 'soma_venda' => $soma_venda]);
+            }
         }
         $orcamento->valor_inicial = ($orcamento->total_material 
         + $orcamento->total_diaria + $orcamento->total_equipe + $orcamento->preco_medico); 
@@ -150,11 +154,11 @@ class OrcamentoController extends Controller
     public function edit($id) {
 
         $orcamento = Orcamento::findOrFail($id);
-        $materials = Material::all();
+        $materiais = Material::all();
         $diarias = Diaria::all();
         $equipes = Equipe::all();
 
-        return view('orcamentos.edit', ['orcamento' => $orcamento, 'materials' => $materials, 'diarias' => $diarias, 
+        return view('orcamentos.edit', ['orcamento' => $orcamento, 'materiais' => $materiais, 'diarias' => $diarias, 
         'equipes' => $equipes]);
     
     }
@@ -174,9 +178,7 @@ class OrcamentoController extends Controller
 
         for ($mat=0; $mat < $quant; $mat++) {
             $material = Material::findOrFail($materials[$mat]);
-            if(is_null($material)){
-                break;
-            }else{
+            if(is_null($material) == false){
             $q = $request->quant_mat[$mat];
             $soma_custo = $material->custo * $q;
             $soma_venda = $material->venda * $q;
@@ -190,9 +192,7 @@ class OrcamentoController extends Controller
 
         for ($dia=0; $dia < $quant; $dia++) { 
             $diaria = Diaria::findOrFail($diarias[$dia]);
-            if(is_null($diaria)){
-                break;
-            }else{
+            if(is_null($diaria) == false){
             $orcamento->total_diaria += $diaria->venda;
 
             $orcamento->diarias()->attach($diaria->id);
@@ -203,9 +203,7 @@ class OrcamentoController extends Controller
 
         for ($equ=0; $equ < $quant; $equ++) { 
             $equipe = Equipe::findOrFail($equipes[$equ]);
-            if(is_null($equipe)){
-                break;
-            }else{
+            if(is_null($equipe) == false){
             $q = $request->quant_equ[$equ];
             $soma_custo = $equipe->custo * $q;
             $soma_venda = $equipe->venda * $q;

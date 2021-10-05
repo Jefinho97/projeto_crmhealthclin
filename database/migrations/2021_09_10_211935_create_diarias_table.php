@@ -15,10 +15,11 @@ class CreateDiariasTable extends Migration
     {
         Schema::create('diarias', function (Blueprint $table) {
             $table->id();
+            $table->timestamps();
             $table->string('descricao');
             $table->double('custo');
             $table->double('venda');
-            $table->timestamps();
+            $table->foreignId('user_id')->constrained();
         });
     }
 

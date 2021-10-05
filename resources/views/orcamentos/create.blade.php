@@ -16,7 +16,7 @@
         <div class="form-group" id="form-mat">
             <label for="title">Materiais e Medicamentos:</label>
             <button type="button" class="clonar"> + </button>
-            <div class="clone-form-mat">   
+            <div class="clone-form-mat">
                 <select name="materials[]" id="materials" class="form-control">
                     <option value="" selected>----</option>
                     @foreach($materials as $material)
@@ -24,7 +24,7 @@
                     @endforeach
                 </select>
                 <label for="title">Quantidade:</label>
-                <input type="int" class="form-control" name="quant_mat[]" id="quant_mat">
+                <input type="number" class="form-control" name="quant_mat[]" id="quant_mat">
             </div>
         </div>       
 
@@ -77,15 +77,4 @@
         <input type="submit" class="btn btn-primary" value="Criar Orcamento">
     </form>
 </div>
-<script>
-    // clone materiais
-    $(".clonar").click(function() {
-        $(".clone-form-mat").last().clone().appendTo("#form-mat");
-    });
-
-    // clone diarias
-    $(".clonar2").click(function() {
-        $(".clone-form-dia").last().clone().appendTo("#form-dia");
-    });
-</script>
 @endsection

@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Criar Orcamento')
+@section('title', 'Editar Orcamento')
 
 @section('content')
 
@@ -19,55 +19,56 @@
         <div class="form-group">
             <label for="title">Medico:</label>
             <input type="text" class="form-control" id="medico" name="medico" value="{{ $orcamento->medico }}">
-            <input type="double" class="form-control" id="preco_medico" name="preco_medico" value="{{ $orcamento->preco_medico }}">
+            <input type="number" class="form-control" id="preco_medico" name="preco_medico" value="{{ $orcamento->preco_medico }}">
         </div>
         
-        <div class="form-group">
+        <div class="form-group" id="form-prof">
             <label for="title">Profissionais:</label>
+            <button type="button" class="clonar3"> + </button>
             @foreach($orcamento->equipes as $orcequ)
-            <select name="equipes[]" id="equipes" class="form-control">
-                @foreach($equipes as $equipe)
-                @if($equipe->id == $orcequ->pivot->equipe_id)
-                <option value="{{ $equipe->id }}" selected>{{ $equipe->funcao }}</option>
-                @else
-                <option value="{{ $equipe->id }}">{{ $equipe->funcao }}</option>
-                @endif
-                @endforeach
-            </select>
-            <label for="title">Quantidade:</label>
-            <input type="int" class="form-control" name="quant_equ[]" id="quant_equ" value="{{ $orcequ->pivot->quant}}">
+            <div class="clone-form-prof">
+                <select name="equipes[]" id="equipes" class="form-control">
+                    <option value="">----</option>
+                    @foreach($equipes as $equipe)
+                    <option value="{{ $equipe->id }}" {{ $equipe->id == $orcequ->pivot->equipe_id ? "selected" : "" }}>{{ $equipe->funcao }}</option>
+                    @endforeach
+                </select>
+                <label for="title">Quantidade:</label>
+                <input type="number" class="form-control" name="quant_equ[]" id="quant_equ" value="{{ $orcequ->pivot->quant}}">
+            </div>
             @endforeach
         </div>
         @endif
-        <div class="form-group">
+
+        <div class="form-group" id="form-mat">
             <label for="title">Materiais e Medicamentos:</label>
+            <button type="button" class="clonar"> + </button>
             @foreach($orcamento->materials as $orcmat)
-            <select name="materials[]" id="materials" class="form-control">
-                @foreach($materials as $material)
-                @if($material->id == $orcmat->pivot->material_id)
-                <option value="{{ $material->id }}" selected>{{ $material->nome }}</option>
-                @else
-                <option value="{{ $material->id }}">{{ $material->nome }}</option>
-                @endif
-                @endforeach
-            </select>
-            <label for="title">Quantidade:</label>
-            <input type="int" class="form-control" name="quant_mat[]" id="quant_mat" value="{{ $orcmat->pivot->quant}}">
+            <div class="clone-form-mat">
+                <select name="materials[]" id="materials" class="form-control">
+                    <option value="">----</option>
+                    @foreach($materiais as $material)
+                    <option value="{{ $material->id }}" {{ $material->id == $orcmat->pivot->material_id ? "selected" : "" }}>{{ $material->nome }}</option>
+                    @endforeach
+                </select>
+                <label for="title">Quantidade:</label>
+                <input type="number" class="form-control" name="quant_mat[]" id="quant_mat" value="{{ $orcmat->pivot->quant}}">
+            </div>
             @endforeach
         </div>       
 
-        <div class="form-group">
+        <div class="form-group" id="form-dia">
             <label for="title">Diarias:</label>
+            <button type="button" class="clonar2"> + </button> 
             @foreach($orcamento->diarias as $orcdia)
-            <select name="diarias[]" id="diarias" class="form-control">
-                @foreach($diarias as $diaria)
-                @if($diaria->id == $orcdia->pivot->diaria_id)
-                <option value="{{ $diaria->id }}" selected>{{ $diaria->descricao }}</option>
-                @else
-                <option value="{{ $diaria->id }}">{{ $diaria->descricao }}</option>
-                @endif
-                @endforeach
-            </select>
+            <div class="clone-form-dia">
+                <select name="diarias[]" id="diarias" class="form-control">
+                    <option value="">----</option>
+                    @foreach($diarias as $diaria)
+                    <option value="{{ $diaria->id }}" {{ $diaria->id == $orcdia->pivot->diaria_id ? "selected" : "" }}>{{ $diaria->descricao }}</option>
+                    @endforeach
+                </select>
+            </div>
             @endforeach
         </div>
 
