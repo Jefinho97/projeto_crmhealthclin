@@ -207,6 +207,16 @@
   }
   
   /* Dashboard */
+  .dashboard-events-container input {
+    padding:0;
+    margin:0;
+    vertical-align:baseline;
+    list-style:none;
+    border:0;
+    background-color: white;
+    font-weight: bold;
+  }
+
   .dashboard-title-container {
     margin-bottom: 30px;
     margin-top: 30px;
@@ -214,8 +224,11 @@
   
   .dashboard-events-container th {
     width: 25%;
+    font-size: medium;  
   }
   
+
+
   .dashboard-events-container form {
     display: inline-block;
   }

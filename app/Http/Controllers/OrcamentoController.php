@@ -30,18 +30,41 @@ class OrcamentoController extends Controller
 
         return view('auth.login');
 
-    }
-    
+    }    
+
     public function dashboard() {
-        
+
         $user = Auth::user();
+        $orcamentos = $user->orcamentos;  
+        $quant = count($orcamentos);
+        $ordem = 1;
 
-        $orcamentos = $user->orcamentos;
+        return view('orcamentos.dashboard', ['orcamentos' => $orcamentos, 'quant' => $quant, 'ordem' => $ordem]);
+    }
 
+    public function ordem(Request $request) {
+        $orcamentos = Auth::user()->orcamentos;
         $quant = count($orcamentos);
 
-        return view('orcamentos.dashboard', ['orcamentos' => $orcamentos, 'quant' => $quant]);
-        
+        switch ($request->ordem) {
+            case '0':
+                $orcamentos = $orcamentos->sortByDesc("data");
+                $ordem = 0;
+                break;
+            case '1':
+                $orcamentos = $orcamentos->sortBy("data");
+                $ordem = 1;
+                break;
+            case '2':
+                $orcamentos = $orcamentos->sortByDesc("procedimento");
+                $ordem = 2;
+                break;
+            case '3':
+                $orcamentos = $orcamentos->sortBy("procedimento");
+                $ordem = 3;
+                break;
+        }
+        return view('orcamentos.dashboard', ['orcamentos' => $orcamentos, 'quant' => $quant, 'ordem' => $ordem]);
     }
 
     public function create(){
@@ -225,5 +248,19 @@ class OrcamentoController extends Controller
 
         return redirect('/dashboard')->with('msg', 'Orçamento editado com sucesso!');
 
+    }
+
+    public function status(Request $request) {
+
+        Orcamento::findOrFail($request->id)->update([ 'status' => $request->status]);
+
+        return redirect('/dashboard');
+    }
+
+    public function razao_status(Request $request) {
+
+        Orcamento::findOrFail($request->id)->update([ 'razao_status' => $request->razao_status]);
+
+        return redirect('/dashboard');
     }
 }
