@@ -14,13 +14,13 @@
         <thead>
             <tr>
                 <th scope="col"> 
-                    <form action="/dashboard/ordem/{{ $ordem <> 0? 0 : 1 }}" method="POST">
+                    <form action="/dashboard/{{ $ordem <> (0 or null)? 0 : 1 }}" method="POST">
                         @csrf
                         <input type="submit" value="Data" >
                     </form>
                 </th>
                 <th scope="col">
-                    <form action="/dashboard/ordem/{{ $ordem <> 2? 2 : 3 }}" method="POST">
+                    <form action="/dashboard/{{ $ordem <> (2 or null)? 2 : 3 }}" method="POST">
                         @csrf
                         <input type="submit" value="Procedimento" >
                     </form>
@@ -39,7 +39,7 @@
                         <form action="/orcamentos/status/{{ $orcamento->id }}" method="POST">
                         @csrf
                         @method('PUT')  
-
+                            <input type="hidden" name="ordem" id="ordem" value="{{ $ordem }}">
                             <select name="status" id="status" class="form-control" onchange="this.form.submit()"> 
                                 <option value="----">----</option>
                                 <option value="novo" {{ $orcamento->status === "novo"? "selected" :"" }}>Novo</option>
@@ -56,7 +56,7 @@
                         <form action="/orcamentos/razao_status/{{ $orcamento->id }}" method="POST">
                         @csrf
                         @method('PUT')  
-
+                            <input type="hidden" name="ordem" id="ordem" value="{{ $ordem }}">
                             <select name="razao_status" id="razao_status" class="form-control" onchange="this.form.submit()" > 
                                 <option value="----">----</option>
                                 <option value="na fila" {{ $orcamento->razao_status === "na fila"? "selected" :"" }}>Na fila para atendimento</option>

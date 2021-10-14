@@ -6,7 +6,7 @@
 
 <div id="event-create-container" class="col-md-6 offset-md-3">
     <h1>Equipe Médica</h1>
-    <form action="/orcamentos/2" method="POST" enctype="multipart/form-data">
+    <form action="/orcamentos/store2" method="POST" enctype="multipart/form-data">
         @csrf
 
         <input type="hidden" id="id" name="id" value="{{ $orcamento->id }}">

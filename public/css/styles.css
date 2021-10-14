@@ -1,5 +1,6 @@
 /* General */
-* {
+
+      *{
     font-family: 'Roboto';
   }
   
@@ -206,6 +207,7 @@
     margin-top: 30px;
   }
   
+
   /* Dashboard */
   .dashboard-events-container input {
     padding:0;
@@ -240,7 +242,7 @@
     width: 100px;
     margin-top: 20px;
   }
-  
+
   /* footer */
   footer {
     text-align: center;
@@ -255,3 +257,4 @@
   footer p {
     margin-bottom: 0;
   }
+  

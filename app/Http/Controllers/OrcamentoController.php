@@ -15,9 +15,12 @@ use BaconQrCode\Renderer\Color\Rgb;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Auth;
 use mysqli;
+use PhpParser\Node\Stmt\Return_;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class OrcamentoController extends Controller
 {
+    // Paginas Principais
 
     public function index() {
         
@@ -37,10 +40,12 @@ class OrcamentoController extends Controller
         $user = Auth::user();
         $orcamentos = $user->orcamentos;  
         $quant = count($orcamentos);
-        $ordem = 1;
+        $ordem = null;
 
         return view('orcamentos.dashboard', ['orcamentos' => $orcamentos, 'quant' => $quant, 'ordem' => $ordem]);
     }
+
+    // Ordenar Dashboard Orçanentos
 
     public function ordem(Request $request) {
         $orcamentos = Auth::user()->orcamentos;
@@ -56,16 +61,18 @@ class OrcamentoController extends Controller
                 $ordem = 1;
                 break;
             case '2':
-                $orcamentos = $orcamentos->sortByDesc("procedimento");
+                $orcamentos = $orcamentos->sortBy("procedimento");
                 $ordem = 2;
                 break;
             case '3':
-                $orcamentos = $orcamentos->sortBy("procedimento");
+                $orcamentos = $orcamentos->sortByDesc("procedimento");
                 $ordem = 3;
                 break;
         }
         return view('orcamentos.dashboard', ['orcamentos' => $orcamentos, 'quant' => $quant, 'ordem' => $ordem]);
     }
+
+    // Criar Orçamento
 
     public function create(){
         $materials = Material::all();
@@ -107,7 +114,25 @@ class OrcamentoController extends Controller
             $q = $request->quant_mat[$mat];
             $soma_custo = $material->custo * $q;
             $soma_venda = $material->venda * $q;
-            $orcamento->total_material += $soma_venda;
+            switch($material->tipo){
+                case "material":
+                    $orcamento->venda_material += $soma_venda;
+                    $orcamento->custo_material += $soma_custo;
+                    break;
+                case "medicamento":
+                    $orcamento->venda_medicamento += $soma_venda;
+                    $orcamento->custo_medicamento += $soma_custo;
+                    break;
+                case "dieta":
+                    $orcamento->venda_dieta += $soma_venda;
+                    $orcamento->custo_dieta += $soma_custo;
+                    break;
+                case "equipamento":
+                    $orcamento->venda_equipamento += $soma_venda;
+                    $orcamento->custo_equipamento += $soma_custo;
+                    break;  
+            }
+            
 
             $orcamento->materials()->attach($material->id, ['quant' => $q, 'soma_custo' => $soma_custo, 'soma_venda' => $soma_venda]);
             }
@@ -118,17 +143,27 @@ class OrcamentoController extends Controller
         for ($dia=0; $dia < $quant; $dia++) { 
             $diaria = Diaria::findOrFail($diarias[$dia]);
             if (is_null($diaria) == false){
-            $orcamento->total_diaria += $diaria->venda;
+            $orcamento->venda_diaria += $diaria->venda;
+            $orcamento->custo_diaria += $diaria->custo;
 
             $orcamento->diarias()->attach($diaria->id);
             }
         }
-        $orcamento->valor_inicial = $orcamento->total_material + $orcamento->total_diaria;
-        $orcamento->update(['total_material' => $orcamento->total_material, 'total_diaria' => $orcamento->total_diaria, 'total_equipe' => $orcamento->total_equipe, 'valor_inicial' => $orcamento->valor_inicial, 'valor_final' => $orcamento->valor_inicial]);
+        $orcamento->valor_inicial = $orcamento->venda_material + $orcamento->venda_diaria 
+        + $orcamento->venda_medicamento + $orcamento->venda_dieta + $orcamento->venda_equipamento;
+
+        $orcamento->update([
+            'custo_material' => $orcamento->custo_material, 'venda_material' => $orcamento->venda_material,
+            'custo_medicamento' => $orcamento->custo_medicamento, 'venda_medicamento' => $orcamento->venda_medicamento, 
+            'custo_dieta' => $orcamento->custo_dieta, 'venda_dieta' => $orcamento->venda_dieta,
+            'custo_equipamento' => $orcamento->custo_equipamento, 'venda_equipamento' => $orcamento->venda_equipamento, 
+            'custo_diaria' => $orcamento->custo_diaria, 'venda_diaria' => $orcamento->venda_diaria,
+            'valor_inicial' => $orcamento->valor_inicial, 'valor_final' => $orcamento->valor_inicial
+        ]);
 
         if($orcamento->tipo == false){
             
-            return redirect('/dashboard')->with('msg','Evento criado com sucesso!');
+            return redirect('/dashboard')->with('msg','Orçamento criado com sucesso!');
 
         } else { 
             $equipes = Equipe::all();
@@ -151,18 +186,20 @@ class OrcamentoController extends Controller
             $q = $request->quant_equ[$equ];
             $soma_custo = $equipe->custo * $q;
             $soma_venda = $equipe->venda * $q;
-            $orcamento->total_equipe += $soma_venda;
+            $orcamento->custo_equipe += $soma_custo;
+            $orcamento->venda_equipe += $soma_venda;
 
             $orcamento->equipes()->attach($equipe->id, ['quant' => $q, 'soma_custo' => $soma_custo, 'soma_venda' => $soma_venda]);
             }
         }
-        $orcamento->valor_inicial = ($orcamento->total_material 
-        + $orcamento->total_diaria + $orcamento->total_equipe + $orcamento->preco_medico); 
+        $orcamento->valor_inicial += $orcamento->venda_equipe + $orcamento->preco_medico; 
 
-        $orcamento->update(['medico' => $request->medico, 'preco_medico' => $request->preco_medico, 'total_equipe' => $orcamento->total_equipe, 'valor_inicial' => $orcamento->valor_inicial, 'valor_final' => $orcamento->valor_inicial]);
+        $orcamento->update(['medico' => $request->medico, 'preco_medico' => $request->preco_medico, 'venda_equipe' => $orcamento->venda_equipe, 'valor_inicial' => $orcamento->valor_inicial, 'valor_final' => $orcamento->valor_inicial]);
 
         return redirect('/dashboard')->with('msg','Orçamento criado com sucesso!');
     }
+
+    // Apagar Orçamento
 
     public function destroy($id) {
         $orcamento = Orcamento::findOrFail($id);
@@ -174,6 +211,9 @@ class OrcamentoController extends Controller
         return redirect('/dashboard')->with('msg', 'Orçamento excluído com sucesso!');
         
     }
+
+    // Editar Orçamento
+
     public function edit($id) {
 
         $orcamento = Orcamento::findOrFail($id);
@@ -250,17 +290,73 @@ class OrcamentoController extends Controller
 
     }
 
+    // Detalhar Orçamento
+
+    public function show($id){
+        $orcamento = Orcamento::findOrFail($id);
+        $user = auth()->user();
+
+        if($user->id == $orcamento->user_id) {
+            $materiais = null;
+            $medicamentos = null;
+            $dietas = null;
+            $equipamentos = null;
+            foreach($orcamento->materials as $material){
+                switch($material->tipo){
+                    case "material":
+                        $materiais[] = $material;
+                        break;
+                    case "medicamento":
+                        $medicamentos[] = $material;
+                        break;
+                    case "dieta":
+                        $dietas[] = $material;
+                        break;
+                    case "equipamento":
+                        $equipamentos[] = $material;
+                        break;
+                }
+            }
+
+            return view('orcamentos.show', ['orcamento' => $orcamento, 'materiais' => $materiais, 'dietas' => $dietas, 'medicamentos' => $medicamentos, 'equipamentos' => $equipamentos]);
+        } else {
+            return redirect('/dashboard');
+        }
+
+    }
+
+    public function gerarpdf($id){
+        $orcamento = Orcamento::findOrFail($id);
+        $pdf = PDF::loadView('orcamentos.dashboard', ['orcamento' => $orcamento]);
+        return $pdf->setPaper('a4')->stream('pdf.pdf');
+    }
+
+    public function up_show(Request $request){
+        Orcamento::findOrFail($request->id)->update([ 'desconto' => $request->desconto, 'valor_final' => ($request->valor_inicial - $request->desconto)]);
+
+        return redirect('/orcamentos/' . $request->id)->with('msg', 'Desconto atualizado com sucesso!');
+    }
+
     public function status(Request $request) {
-
         Orcamento::findOrFail($request->id)->update([ 'status' => $request->status]);
-
-        return redirect('/dashboard');
+        
+        if(is_null($request->ordem)){
+            return redirect('/dashboard');  
+        } else {
+            return redirect('/dashboard/' . $request->ordem);
+        }
+        
     }
 
     public function razao_status(Request $request) {
 
         Orcamento::findOrFail($request->id)->update([ 'razao_status' => $request->razao_status]);
 
-        return redirect('/dashboard');
+        if(is_null($request->ordem)){
+            return redirect('/dashboard');  
+        } else {
+            return redirect('/dashboard/' . $request->ordem);
+        }
+
     }
 }

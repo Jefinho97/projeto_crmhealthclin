@@ -15,8 +15,8 @@ class EquipesTableSeeder extends Seeder
     public function run()
     {
         $equipes = [
-            ['funcao' => 'Tecnico em enfermagem', 'custo' => 1750.00, 'venda' => 2000.00],
-            ['funcao' => 'Cuidador', 'custo' => 2250.00, 'venda' => 2500.00],
+            ['funcao' => 'Tecnico em enfermagem', 'custo' => 1750.00, 'venda' => 2000.00, 'user_id' => 1],
+            ['funcao' => 'Cuidador', 'custo' => 2250.00, 'venda' => 2500.00, 'user_id' => 1],
         ];
         Equipe::insert($equipes);
     }

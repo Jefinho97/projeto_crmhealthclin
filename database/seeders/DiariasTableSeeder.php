@@ -15,8 +15,8 @@ class DiariasTableSeeder extends Seeder
     public function run()
     {
         $diarias = [
-            ['descricao' => 'UTI', 'custo' => 2500.00, 'venda' => 3250.00],
-            ['descricao' => 'Apartamento', 'custo' => 1500.00, 'venda' => 2000.00]
+            ['descricao' => 'UTI', 'custo' => 2500.00, 'venda' => 3250.00, 'user_id' => 1],
+            ['descricao' => 'Apartamento', 'custo' => 1500.00, 'venda' => 2000.00, 'user_id' => 1]
         ];
         Diaria::insert($diarias);
     }

@@ -29,10 +29,27 @@ class CreateOrcamentosTable extends Migration
             $table->text('condicoes_pag')->default('Não Expecificado');
             $table->dateTime('data');
             $table->string('medico')->nullable();
-            $table->double('preco_medico', 20, 2)->nullable();
-            $table->double('total_equipe', 20, 2)->default(0.00);
-            $table->double('total_diaria', 20, 2)->default(0.00);
-            $table->double('total_material', 20, 2)->default(0.00);
+            
+            $table->double('preco_medico', 20, 2)->default(0.00);
+            $table->double('custo_equipe', 20, 2)->default(0.00);
+            $table->double('venda_equipe', 20, 2)->default(0.00);
+            
+            $table->double('custo_diaria', 20, 2)->default(0.00);
+            $table->double('venda_diaria', 20, 2)->default(0.00);
+
+            $table->double('custo_material', 20, 2)->default(0.00);
+            $table->double('venda_material', 20, 2)->default(0.00);
+            
+            
+            $table->double('custo_medicamento', 20, 2)->default(0.00);
+            $table->double('venda_medicamento', 20, 2)->default(0.00);
+
+            $table->double('custo_dieta', 20, 2)->default(0.00);
+            $table->double('venda_dieta', 20, 2)->default(0.00);
+            
+            $table->double('custo_equipamento', 20, 2)->default(0.00);
+            $table->double('venda_equipamento', 20, 2)->default(0.00);
+
             $table->double('desconto', 20, 2)->default(0.00);
             $table->double('valor_inicial', 20, 2)->default(0.00);
             $table->double('valor_final', 20, 2)->default(0.00);
