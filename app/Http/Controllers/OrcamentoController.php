@@ -98,7 +98,7 @@ class OrcamentoController extends Controller
         $orcamento->data = $request->data;
         $orcamento->tipo = $request->has('tipo');        
         
-        $orcamento->user_id = Auth::id();
+        $orcamento->user_id = Auth::user()->id;
         $orcamento->save();
 
         $orcamento = Orcamento::all()->last();
@@ -327,7 +327,7 @@ class OrcamentoController extends Controller
 
     public function gerarpdf($id){
         $orcamento = Orcamento::findOrFail($id);
-        $pdf = PDF::loadView('orcamentos.dashboard', ['orcamento' => $orcamento]);
+        $pdf = PDF::loadView('orcamentos.pdf', ['orcamento' => $orcamento]);
         return $pdf->setPaper('a4')->stream('pdf.pdf');
     }
 
