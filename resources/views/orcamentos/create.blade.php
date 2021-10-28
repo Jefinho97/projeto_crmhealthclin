@@ -6,7 +6,7 @@
 
 <div id="event-create-container" class="col-md-6 offset-md-3">
     <h1>Crie o seu Orçamento</h1>
-    <form action="/orcamentos" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('orcamentos.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
             <label for="title">Procedimento:</label>

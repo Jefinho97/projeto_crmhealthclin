@@ -6,7 +6,7 @@
 
 <div id="event-create-container" class="col-md-6 offset-md-3">
     <h1>Cadastrar Diaria</h1>
-    <form action="/diarias" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('diarias.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
             <label for="title">Descrição:</label>

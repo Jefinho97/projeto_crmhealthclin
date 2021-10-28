@@ -6,7 +6,7 @@
 
 <div id="event-create-container" class="col-md-6 offset-md-3">
     <h1>Adicionar materiais</h1>
-    <form action="/materiais" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('materiais.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
             <label for="title">Tipo:</label>

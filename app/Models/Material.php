@@ -9,6 +9,8 @@ class Material extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function user() {
         return $this->belongsTo('App\Models\User');
     }
@@ -17,4 +19,6 @@ class Material extends Model
         return $this->belongsToMany('App\Models\Orcamento')
         ->withPivot('quant', 'soma_custo', 'soma_venda');
     }
+
+    
 }

@@ -33,17 +33,20 @@ class DiariaController extends Controller
         $diarias->descricao = $request->descricao;
         $diarias->custo = $request->custo;
         $diarias->venda = $request->venda;
+        $diarias->user_id = Auth::id();
            
         $diarias->save();
  
-            return redirect('/dashboard')->with('msg','Diaria criado com sucesso!');
+            return redirect()->route('diarias.dashboard')->with('msg','Diaria criado com sucesso!');
 
     }
     
     public function destroy($id) {
-        Diaria::findOrFail($id)->delete();
+        $diaria = Diaria::findOrFail($id);
+        $diaria->orcamentos()->detach();
+        $diaria->delete();
 
-        return redirect('/dashboard')->with('msg', 'Diaria excluída com sucesso!');
+        return redirect()->route('diarias.dashboard')->with('msg', 'Diaria excluída com sucesso!');
         
     }
 
@@ -71,6 +74,6 @@ class DiariaController extends Controller
 
         Diaria::findOrFail($request->id)->update($request->all());
 
-        return redirect('/diarias/dashboard')->with('msg', 'Diaria editada com sucesso!');
+        return redirect()->route('diarias.dashboard')->with('msg', 'Diaria editada com sucesso!');
     }
 }

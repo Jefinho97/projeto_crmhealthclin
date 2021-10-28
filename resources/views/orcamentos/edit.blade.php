@@ -6,7 +6,7 @@
 
 <div id="event-create-container" class="col-md-6 offset-md-3">
     <h1>Editar Orçamento</h1>
-    <form action="/orcamentos/update/{{ $orcamento->id }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('orcamentos.update', [$orcamento->id])  }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 

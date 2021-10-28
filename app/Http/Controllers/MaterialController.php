@@ -18,6 +18,7 @@ use mysqli;
 
 class MaterialController extends Controller
 {
+
     public function create(){
 
         return view('materiais.create');
@@ -34,17 +35,20 @@ class MaterialController extends Controller
         $material->uni_medida = $request->uni_medida;
         $material->custo = $request->custo;
         $material->venda = $request->venda;
+        $material->user_id = Auth::id();
            
         $material->save();
  
-            return redirect('/materiais/dashboard')->with('msg','Material criado com sucesso!');
+            return redirect()->route('materiais.dashboard')->with('msg','Material criado com sucesso!');
 
     }
 
     public function destroy($id) {
-        Material::findOrFail($id)->delete();
+        $material = Material::findOrFail($id);
+        $material->orcamentos()->detach();
+        $material->delete();
 
-        return redirect('/materiais/dashboard')->with('msg', 'Material excluída com sucesso!');
+        return redirect()->route('materiais.dashboard')->with('msg', 'Material excluída com sucesso!');
         
     }
 
@@ -61,7 +65,6 @@ class MaterialController extends Controller
     }
 
     public function edit($id) {
-
         $material = Material::findOrFail($id);
 
         return view('materiais.edit', ['material' => $material]);
@@ -72,6 +75,6 @@ class MaterialController extends Controller
 
         Material::findOrFail($request->id)->update($request->all());
 
-        return redirect('/materiais/dashboard')->with('msg', 'Material editado com sucesso!');
+        return redirect()->route('materiais.dashboard')->with('msg', 'Material editado com sucesso!');
     }
 }

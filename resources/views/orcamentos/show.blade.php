@@ -282,7 +282,7 @@
                         <td scope="row">Valor Inicial</td>
                         <td>{{ $orcamento->valor_inicial }}</td>
                     </tr>
-                    <form action="/orcamentos/up/{{ $orcamento->id }}" method="POST">
+                    <form action="{{ route('orcamentos.up_show', [$orcamento->id]) }}" method="POST">
                         @csrf
                         @method('PUT') 
                         <input type="hidden" name="valor_inicial" value="{{ $orcamento->valor_inicial }}">

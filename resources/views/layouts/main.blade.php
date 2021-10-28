@@ -11,7 +11,7 @@
 
         <!-- CSS da aplicação -->
         <link rel="stylesheet" href="/css/styles.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     </head>
     <body>
     <header>
@@ -22,19 +22,19 @@
             </a>
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a href="/orcamentos/create" class="nav-link">Criar Orçamentos</a>
+                <a href="{{ route('orcamentos.create') }}" class="nav-link">Criar Orçamentos</a>
               </li>
               <li class="nav-item">
-                <a href="/dashboard" class="nav-link">Orçamentos Existentes</a>
+                <a href="{{ route('orcamentos.dashboard') }}" class="nav-link">Orçamentos</a>
               </li>
               <li class="nav-item">
-                <a href="/materiais/dashboard" class="nav-link">Materiais</a>
+                <a href="{{ route('materiais.dashboard') }}" class="nav-link">Materiais</a>
               </li>
               <li class="nav-item">
-                <a href="/diarias/create" class="nav-link">Adicionar Diarias</a>
+                <a href="{{ route('diarias.dashboard') }}" class="nav-link">Diarias</a>
               </li>
               <li class="nav-item">
-                <a href="/equipes/create" class="nav-link">Adicionar Profissionais</a>
+                <a href="{{ route('equipes.dashboard') }}" class="nav-link">Profissionais</a>
               </li>
               <li class="nav-item">
                 <form action="/logout" method="POST">

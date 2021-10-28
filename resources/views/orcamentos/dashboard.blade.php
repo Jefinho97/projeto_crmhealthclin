@@ -14,15 +14,17 @@
         <thead>
             <tr>
                 <th scope="col"> 
-                    <form action="/dashboard/{{ $ordem <> (0 or null)? 0 : 1 }}" method="POST">
+                    <form method="POST">
                         @csrf
-                        <input type="submit" value="Data" >
+                        <input type="hidden" value="{{ $ordem <> (0 or null)? 0 : 1 }}" name="num_ordem" id="num_ordem">
+                        <input type="button" value="Data" id="ordem" name="ordem">
                     </form>
                 </th>
                 <th scope="col">
-                    <form action="/dashboard/{{ $ordem <> (2 or null)? 2 : 3 }}" method="POST">
+                    <form method="POST">
                         @csrf
-                        <input type="submit" value="Procedimento" >
+                        <input type="hidden" value="{{ $ordem <> (2 or null)? 2 : 3 }}" name="num_ordem" id="num_ordem">
+                        <input type="button" value="Procedimento" id="ordem" name="ordem">
                     </form>
                 </th>
                 <th scope="col">Status</th>
@@ -34,9 +36,9 @@
             @foreach($orcamentos as $orcamento)
                 <tr>
                     <td scope="row">{{ date('d/m/y', strtotime($orcamento->data)) }}</td>
-                    <td><a href="/orcamentos/{{ $orcamento->id }}">{{ $orcamento->procedimento }}</a></td>
+                    <td><a href="{{ route('orcamentos.show',[$orcamento->id]) }}">{{ $orcamento->procedimento }}</a></td>
                     <td>
-                        <form action="/orcamentos/status/{{ $orcamento->id }}" method="POST">
+                        <form action="{{ route('orcamentos.status',[$orcamento->id]) }}" method="POST">
                         @csrf
                         @method('PUT')  
                             <input type="hidden" name="ordem" id="ordem" value="{{ $ordem }}">
@@ -53,7 +55,7 @@
                         </form>
                     </td>
                     <td>
-                        <form action="/orcamentos/razao_status/{{ $orcamento->id }}" method="POST">
+                        <form action="{{ route('orcamentos.razao_status',[$orcamento->id]) }}" method="POST">
                         @csrf
                         @method('PUT')  
                             <input type="hidden" name="ordem" id="ordem" value="{{ $ordem }}">
@@ -66,10 +68,10 @@
                         </form>
                     </td>
                     <td>
-                        <a href="/orcamentos/edit/{{ $orcamento->id }}" class="btn btn-info edit-btn "> Editar </a> 
+                        <a href="{{ route('orcamentos.edit', [$orcamento->id]) }}" class="btn btn-info edit-btn "> Editar </a> 
                     </td>
                     <td>    
-                        <form action="/orcamentos/{{ $orcamento->id }}" method="POST">
+                        <form action="{{ route('orcamentos.destroy', [$orcamento->id]) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger delete-btn"> Deletar</button>
@@ -80,7 +82,7 @@
         </tbody>
     </table>
     @else
-    <p>Não há nenhum orçamento cadastrado, <a href="/orcamentos/create"> criar orçamento</a></p>
+    <p>Não há nenhum orçamento cadastrado, <a href="{{ route('orcamentos.create') }}"> criar orçamento</a></p>
     @endif
 </div>
 @endsection

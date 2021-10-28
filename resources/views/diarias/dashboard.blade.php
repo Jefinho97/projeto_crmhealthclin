@@ -6,14 +6,14 @@
 
 
 <div class="col-md-10 offset-md-1 dashboard-title-container">
-<h1>Diarias Cadastradas</h1> <a href="/diarias/create"> cadastrar diaria</a>
+<h1>Diarias Cadastradas</h1> <a href="{{ route('diarias.create') }}"> cadastrar diaria</a>
 </div>
 <div class="col-md-10 offset-md-1 dashboard-events-container">
     @if( $quant > 0)
     <table class="table">   
         <thead>
             <tr>
-                <th scope="col">Discrição</th>
+                <th scope="col">Descrição</th>
                 <th scope="col">Custo</th>
                 <th scope="col">Venda</th>
                 <th scope="col">Ações</th>
@@ -22,14 +22,14 @@
         <tbody>
             @foreach($diarias as $diaria)
                 <tr>
-                    <td>{{ $diaria->tipo }}</td>
+                    <td>{{ $diaria->descricao }}</td>
                     <td>{{ $diaria->custo }}</td>
                     <td>{{ $diaria->venda }}</td>
                     <td>
-                        <a href="/diarias/edit/{{ $diaria->id }}" class="btn btn-info edit-btn "><ion-icon name="create-outline"></ion-icon> Editar </a> 
+                        <a href="{{ route('diarias.edit', [$diaria->id]) }}" class="btn btn-info edit-btn "><ion-icon name="create-outline"></ion-icon> Editar </a> 
                     </td>
                     <td>    
-                        <form action="/diarias/{{ $diaria->id }}" method="POST">
+                        <form action="{{ route('diarias.destroy', [$diaria->id]) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger delete-btn"><ion-icon name="trash-outline"></ion-icon> Deletar</button>
@@ -40,7 +40,7 @@
         </tbody>
     </table>
     @else
-    <p>Não há nenhuma diaria cadastrada, <a href="/diarias/create"> cadastrar diaria</a></p>
+    <p>Não há nenhuma diaria cadastrada, <a href="{{ route('diarias.create') }}"> cadastrar diaria</a></p>
     @endif
 </div>
 @endsection

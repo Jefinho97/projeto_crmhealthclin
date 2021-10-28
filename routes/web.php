@@ -16,52 +16,71 @@ use App\Http\Controllers\OrcamentoController;
 use App\Http\Controllers\DiariaController;
 use App\Http\Controllers\EquipeController;
 use App\Http\Controllers\MaterialController;
-use App\Http\Controllers\PDFController;
 
 /** Rotas Orçamento */
 
-Route::get('/dashboard', [OrcamentoController::class, 'dashboard'])->middleware('auth');
-Route::get('/dashboard/{ordem}', [OrcamentoController::class, 'ordem'])->middleware('auth');
-Route::post('/dashboard/{ordem}', [OrcamentoController::class, 'ordem'])->middleware('auth');
-
 Route::get('/', [OrcamentoController::class, 'index']);
-Route::get('/orcamentos/create', [OrcamentoController::class, 'create'])->middleware('auth');
-Route::post('/orcamentos', [OrcamentoController::class, 'store']);
-Route::post('/orcamentos/store2', [OrcamentoController::class, 'store2']);
-Route::get('/orcamentos/{id}', [OrcamentoController::class, 'show']);
 
-Route::get('/orcamentos/{id}/pdf', [OrcamentoController::class, 'gerarpdf']);
+Route::middleware('auth')->group(function() {
 
-Route::delete('/orcamentos/{id}', [OrcamentoController::class, 'destroy'])->middleware('auth');
-Route::get('/orcamentos/edit/{id}', [OrcamentoController::class, 'edit'])->middleware('auth');
-Route::put('/orcamentos/update/{id}', [OrcamentoController::class, 'update'])->middleware('auth');
-Route::put('/orcamentos/status/{id}', [OrcamentoController::class, 'status'])->middleware('auth');
-Route::put('/orcamentos/razao_status/{id}', [OrcamentoController::class, 'razao_status'])->middleware('auth');
-Route::put('/orcamentos/up/{id}', [OrcamentoController::class, 'up_show'])->middleware('auth');
+    Route::prefix('orcamentos')->name('orcamentos.')->group( function() {
 
-/** Rotas Diarias */
-Route::get('/diarias/create', [DiariaController::class, 'create'])->middleware('auth');
-Route::post('/diarias', [DiariaController::class, 'store'])->middleware('auth');
-Route::delete('/diarias/{id}', [DiariaController::class, 'destroy'])->middleware('auth');
-Route::get('/diarias/dashboard', [DiariaController::class, 'dashboard'])->middleware('auth');
-Route::get('/diarias/edit/{id}', [DiariaController::class, 'edit'])->middleware('auth');
-Route::put('/diarias/update/{id}', [DiariaController::class, 'update'])->middleware('auth');
+        Route::get('dashboard', [OrcamentoController::class, 'dashboard'])->name('dashboard');
+        //Route::get('/dashboard/{ordem}', [OrcamentoController::class, 'ordem'])->middleware('auth');
+        Route::post('dashboard/{ordem}', [OrcamentoController::class, 'ordem'])->name('ordem');
+        Route::get('create', [OrcamentoController::class, 'create'])->name('create');
+        Route::post('', [OrcamentoController::class, 'store'])->name('store');
+        Route::post('store2', [OrcamentoController::class, 'store2'])->name('store2');
+        Route::get('{id}', [OrcamentoController::class, 'show'])->name('show');
+        Route::get('{id}/pdf', [OrcamentoController::class, 'gerarpdf'])->name('gerarpdf');
+        Route::delete('{id}', [OrcamentoController::class, 'destroy'])->name('destroy');
+        Route::get('edit/{id}', [OrcamentoController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [OrcamentoController::class, 'update'])->name('update');
+        Route::put('status/{id}', [OrcamentoController::class, 'status'])->name('status');
+        Route::put('razao_status/{id}', [OrcamentoController::class, 'razao_status'])->name('razao_status');
+        Route::put('up_show/{id}', [OrcamentoController::class, 'up_show'])->name('up_show');
 
-/** Rotas Equipes */
-Route::get('/equipes/create', [EquipeController::class, 'create'])->middleware('auth');
-Route::post('/equipes', [EquipeController::class, 'store'])->middleware('auth');
-Route::delete('/equipes/{id}', [EquipeController::class, 'destroy'])->middleware('auth');
-Route::get('/equipes/dashboard', [EquipeController::class, 'dashboard'])->middleware('auth');
-Route::get('/equipes/edit/{id}', [EquipeController::class, 'edit'])->middleware('auth');
-Route::put('/equipes/update/{id}', [EquipeController::class, 'update'])->middleware('auth');
+    });
 
-/** Rotas Materiais */
-Route::get('/materiais/create', [MaterialController::class, 'create'])->middleware('auth');
-Route::post('/materiais', [MaterialController::class, 'store'])->middleware('auth');
-Route::delete('/materiais/{id}', [MaterialController::class, 'destroy'])->middleware('auth');
-Route::get('/materiais/dashboard', [MaterialController::class, 'dashboard'])->middleware('auth');
-Route::get('/materiais/edit/{id}', [MaterialController::class, 'edit'])->middleware('auth');
-Route::put('/materiais/update/{id}', [MaterialController::class, 'update'])->middleware('auth');
+    /** Rotas Diarias */
 
+    Route::prefix('diarias')->name('diarias.')->group( function(){
+
+        Route::get('create', [DiariaController::class, 'create'])->name('create');
+        Route::post('', [DiariaController::class, 'store'])->name('store');
+        Route::delete('{id}', [DiariaController::class, 'destroy'])->name('destroy');
+        Route::get('dashboard', [DiariaController::class, 'dashboard'])->name('dashboard');
+        Route::get('edit/{id}', [DiariaController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [DiariaController::class, 'update'])->name('update');
+
+    });
+
+    /** Rotas Equipes */
+
+    Route::prefix('equipes')->name('equipes.')->group( function(){
+
+        Route::get('create', [EquipeController::class, 'create'])->name('create');
+        Route::post('', [EquipeController::class, 'store'])->name('store');
+        Route::delete('{id}', [EquipeController::class, 'destroy'])->name('destroy');
+        Route::get('dashboard', [EquipeController::class, 'dashboard'])->name('dashboard');
+        Route::get('edit/{id}', [EquipeController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [EquipeController::class, 'update'])->name('update');
+
+    });
+
+    /** Rotas Materiais */
+
+    Route::prefix('materiais')->name('materiais.')->group( function(){
+
+        Route::get('create', [MaterialController::class, 'create'])->name('create');
+        Route::post('', [MaterialController::class, 'store'])->name('store');
+        Route::delete('{id}', [MaterialController::class, 'destroy'])->name('destroy');
+        Route::get('dashboard', [MaterialController::class, 'dashboard'])->name('dashboard');
+        Route::get('edit/{id}', [MaterialController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [MaterialController::class, 'update'])->name('update');
+
+    });
+
+});
 
 

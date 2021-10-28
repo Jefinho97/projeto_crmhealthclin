@@ -32,16 +32,19 @@ class EquipeController extends Controller
         $equipe->funcao = $request->funcao;
         $equipe->custo = $request->custo;
         $equipe->venda = $request->venda;
+        $equipe->user_id = Auth::user();
            
         $equipe->save();
  
-            return redirect('/dashboard')->with('msg','Função criado com sucesso!');
+            return redirect()->route('equipes.dashboard')->with('msg','Função criado com sucesso!');
 
     }
     public function destroy($id) {
-        Equipe::findOrFail($id)->delete();
+        $equipe = Equipe::findOrFail($id);
+        $equipe->orcamentos()->detach();
+        $equipe->delete();
 
-        return redirect('/dashboard')->with('msg', 'Função excluída com sucesso!');
+        return redirect()->route('equipes.dashboard')->with('msg', 'Função excluída com sucesso!');
         
     }
 
@@ -69,6 +72,6 @@ class EquipeController extends Controller
 
         Equipe::findOrFail($request->id)->update($request->all());
 
-        return redirect('/equipes/dashboard')->with('msg', 'Equipe editada com sucesso!');
+        return redirect()->route('equipes.dashboard')->with('msg', 'Equipe editada com sucesso!');
     }
 }
