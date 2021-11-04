@@ -30,10 +30,9 @@ Route::middleware('auth')->group(function() {
         Route::post('dashboard/{ordem}', [OrcamentoController::class, 'ordem'])->name('ordem');
         Route::get('create', [OrcamentoController::class, 'create'])->name('create');
         Route::post('', [OrcamentoController::class, 'store'])->name('store');
-        Route::post('store2', [OrcamentoController::class, 'store2'])->name('store2');
         Route::get('{id}', [OrcamentoController::class, 'show'])->name('show');
         Route::get('{id}/pdf', [OrcamentoController::class, 'gerarpdf'])->name('gerarpdf');
-        Route::delete('{id}', [OrcamentoController::class, 'destroy'])->name('destroy');
+        Route::post('delete', [OrcamentoController::class, 'destroy'])->name('destroy');
         Route::get('edit/{id}', [OrcamentoController::class, 'edit'])->name('edit');
         Route::put('update/{id}', [OrcamentoController::class, 'update'])->name('update');
         Route::put('status/{id}', [OrcamentoController::class, 'status'])->name('status');

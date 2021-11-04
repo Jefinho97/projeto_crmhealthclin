@@ -1,17 +1,24 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" ng-app='todoApp'>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>@yield('title')</title>
 
         <!-- CSS Bootstrap -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-
+        <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
+        
+        <link rel="stylesheet" href="{{ asset('datatable/css/dataTables.bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('datatable/css/dataTables.bootstrap4.min.css') }}">
+        
+        <link rel="stylesheet" href="{{ asset('sweetalert2/sweetalert2.min.css') }}">
+        
+        <link rel="stylesheet" href="{{ asset('toastr/toastr.min.css') }}">
+        
         <!-- CSS da aplicação -->
-        <link rel="stylesheet" href="/css/styles.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+        
     </head>
     <body>
     <header>
@@ -61,7 +68,5 @@
       <footer>
         <p>CRM Health Clin &copy; 2021</p>
       </footer>
-      <script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
-      <script src="/js/scripts.js"></script>
     </body>
 </html>

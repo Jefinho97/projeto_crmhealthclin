@@ -10,7 +10,7 @@
 </div>
 <div class="col-md-10 offset-md-1 dashboard-events-container">
     @if( $quant > 0)
-    <table class="table table-hover">   
+    <table class="table table-hover" id="orcamento-table">   
         <thead>
             <tr>
                 <th scope="col"> 
@@ -71,11 +71,7 @@
                         <a href="{{ route('orcamentos.edit', [$orcamento->id]) }}" class="btn btn-info edit-btn "> Editar </a> 
                     </td>
                     <td>    
-                        <form action="{{ route('orcamentos.destroy', [$orcamento->id]) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger delete-btn"> Deletar</button>
-                        </form>
+                        <button class="btn btn-sm btn-danger" data-id="{{ $orcamento->id }}" id="destroy">Delete</button>
                     </td>
                 </tr>
             @endforeach
@@ -85,4 +81,45 @@
     <p>Não há nenhum orçamento cadastrado, <a href="{{ route('orcamentos.create') }}"> criar orçamento</a></p>
     @endif
 </div>
+@extends('layouts.scripts')
+<script>
+    toastr.options.preventDuplicates = true;
+
+    $.ajaxSetup({
+        headers:{
+            'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $(function(){
+            
+        $(document).on('click','#destroy', function(){
+            var orcamento_id = $(this).data('id');
+            var url = '{{ route("orcamentos.destroy") }}';
+            swal.fire({
+                    title:'Excluir Orçamento?',
+                    html:'Tem certeza que quer  <b>deletar</b> this country',
+                    showCancelButton:true,
+                    showCloseButton:true,
+                    cancelButtonText:'Cancelar',
+                    confirmButtonText:'Confirmar',
+                    cancelButtonColor:'#d33',
+                    confirmButtonColor:'#556ee6',
+                    width:300,
+                    allowOutsideClick:false
+            }).then(function(result){
+                if(result.value){
+                    $.post(url,{orcamento_id:orcamento_id}, function(data){
+                        if(data.code == 1){
+                            document.location.reload(true);
+                            toastr.success(data.msg);
+                        }else{
+                            toastr.error(data.msg);
+                        }
+                    },'json');
+                }
+            });
+        });
+    });
+</script>
 @endsection

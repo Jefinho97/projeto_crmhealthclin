@@ -4,6 +4,10 @@
   * {
     font-family: 'Roboto', sans-serif;
   } 
+
+  #medprof {
+    display: none;
+  }
   
   body {
     min-height: 100vh;
@@ -11,6 +15,10 @@
     position: relative;
   }
   
+  #materials select {
+    -webkit-appearance: none;
+     width: 400px;
+    }
   header {
     background-color: #FFF;
     border-bottom: 1px solid #CCC;
