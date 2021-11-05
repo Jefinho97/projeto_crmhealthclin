@@ -74,7 +74,7 @@ class OrcamentoController extends Controller
         $orcamento->save();
         $orcamento = Orcamento::all()->last();
 
-        if($orcamento->tipo == false){
+        if($orcamento->tipo == true){
             $orcamento->medico = $request->medico;
             $orcamento->preco_medico = $request->preco_medico;
 
